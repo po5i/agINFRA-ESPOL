@@ -2,6 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 <!-- TODO: i'm not a designer, you may want to update the style sheet, 
         very basic, please contribute improvements! :) -->
 <link rel="stylesheet" type="text/css" href="css/simple.css?m=2012-06-18" />
@@ -59,24 +60,36 @@ var esbbSimpleSearchQuery = new esbbSearchQueryModel( {
 			terms : {
 				field : "aginfra_eu.lom_general_language_type.value",
 				size : 20
+			},
+			facet_filter : {
+				match_all: { }
 			}
 		},
 		"aginfra_eu.lom_educational_context_value_type.value" : {
 			terms : {
 				field : "aginfra_eu.lom_educational_context_value_type.value",
 				size : 20
+			},
+			facet_filter : {
+				match_all: { }
 			}
 		},
 		"aginfra_eu.lom_technical_format_type.value" : {
 			terms : {
 				field    : "aginfra_eu.lom_technical_format_type.value",
 				size : 20
+			},
+			facet_filter : {
+				match_all: { }
 			}
 		},
 		"aginfra_eu.dataset.value" : {
 			terms : {
 				field    : "aginfra_eu.dataset.value",
 				size : 20
+			},
+			facet_filter : {
+				match_all: { }
 			}
 		}
 	}
@@ -126,11 +139,12 @@ esbbSimpleSearchQuery.index_type = 'aginfra_ds';
 
 	<!-- aginfra -->
 	<div style="clear:both;"></div>
-	<div style="text-align:center;width:980px;padding:10px;margin:0 auto;">
+	<div style="text-align:center;padding:10px;margin:0 auto;">
 		<img src="img/EUflag_logo.jpg">
 		<img src="img/e-infrastructure_logo.jpg">
 		<img src="img/FP7_capacities_logo.jpg">
 	</div>
+	<div class="ag_copyright">Copyright &copy; 2011 - <?php echo date("Y") ?>. <a href="http://aginfra.eu">agINFRA.eu</a></div>
 </div>
 
 
@@ -157,6 +171,13 @@ esbbSimpleSearchQuery.index_type = 'aginfra_ds';
 				$(this).addClass('active');
 			}
 		});
+
+		//default search
+		if($(".esbb-search-query").val() == ""){
+			$(".esbb-search-query").val("*")
+			$(".esbb-search-button").click();
+			$(".esbb-search-query").val("")
+		}
 	});
 </script>
 

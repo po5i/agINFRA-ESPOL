@@ -106,6 +106,20 @@ var esbbSearchQueryModel = Backbone.Model.extend({
 		this.set( curr );
 	},
 
+	updateFacetFilters: function( field, new_filters ) {		//po5i: experimental
+		var curr = this.toJSON()
+		console.log('updateFacetFilters');
+
+		if ( new_filters.length == 0 ) {
+			eval("curr.facets."+field+".facet_filter = { match_all: {} }");
+		}
+		else {
+			eval("curr.facets."+field+".facet_filter = new_filters");
+		}
+		console.log(curr.facets);
+		this.set( curr );
+	},
+
 	getFiltersForChanging: function() {
 		var curr = this.toJSON();
 		var curr_filt = curr.query.filtered.filter;
@@ -171,10 +185,11 @@ var esbbSearchQueryModel = Backbone.Model.extend({
 	},
 
 	addTermFilter: function( field, term ) {
-		var curr_filt = this.getFiltersForChanging();
+		var curr_filt = this.getFiltersForChanging();		
 		var a = {};
 		a[ field ] = term;
 		curr_filt.push( { term: a } );
+		//this.updateFacetFilters( field, curr_filt );
 		this.updateFilters( curr_filt );
 	},
 
@@ -745,6 +760,7 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 	select_el: '',
 	select_$el: null,
 	avail_fields: [],
+	map_table: {},
 	template: '\
 			<p><label>Filters:</label>\
 			<input type="hidden" id="{{input_el_id}}" value="">\
@@ -758,6 +774,8 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 	initialize: function() {
 		this.select_el = this.el.id + '-input';
 		this.avail_fields = this.options.avail_fields;
+		this.map_table = this.options.map_table;
+		this.map_table_inv = this.options.map_table_inv;
 		_.bindAll( this, 'render' );
 		this.model.bind('change', this.render, this );
 		this.render();
@@ -774,7 +792,8 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 		for ( var i in filters ) {
 			if ( typeof filters[i].term != 'undefined' ) {
 				for ( var fld in filters[i].term ) {
-					tags.push( fld + ':' + filters[i].term[fld] );
+					//tags.push( fld + ':' + filters[i].term[fld] );
+					tags.push( this.map_table_inv[fld] + ':' + filters[i].term[fld] );	//po5i: map table inverted
 				}
 			}
 			//TODO: need a way to be able to successfully delete a range filter, and not have date range show up
@@ -791,6 +810,8 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 			// 	}
 			// }
 		}
+		
+		global_map_table = this.map_table;	//po5i: maximize the scope of this variable
 
 		//build the list of autocomplete fields
 		var i = 0;
@@ -802,7 +823,7 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 		this.select_$el = $( '#' + this.select_el );
 		this.select_$el.attr( 'value', tags.join( ', ' ) );
 		this.select_$el.select2( { tags: tag_data } );
-		this.select_$el.change( function() { 
+		this.select_$el.change( function() {
 			//check the input, must be 'fld:term'
 			var d = t.select_$el.select2( 'val' );
 			var kv = [];
@@ -812,7 +833,8 @@ var esbbSearchFilterSelectView = Backbone.View.extend({
 				if ( flds.length != 2 )
 					input_ok = false;
 				else
-					kv.push( { field: flds[0], term: flds[1] } );
+					//kv.push( { field: flds[0], term: flds[1] } );
+					kv.push( { field: global_map_table[flds[0]] , term: flds[1] } );		//po5i: map table
 			} );
 			if ( ! input_ok ) {
 				t.$el.find( '.esbb-filter-sel-error' ).html( 'Filters must be in the format "&ltfield&gt:&ltterm&gt", for example "content:jetpack" will search only within docs that have the term "jetpack" in the content field.' ).show();
@@ -1170,9 +1192,10 @@ var esbbNavigationView = Backbone.View.extend({
 		var from = this.model.getFrom();
 		var size = this.model.getSize();
 		//console.log(from);
-		var html = this.headerName + ' ';
-		html += '<a class="esbb-nav-previous" href="">Previous</a> ';
-		html += '<a class="esbb-nav-next" href="">Next</a> ';
+		var html = '';
+		html += '<a class="esbb-nav-previous" href=""><img src="img/left.png" /></a> ';
+		//html += this.headerName;
+		html += ' <a class="esbb-nav-next" href=""><img src="img/right.png" /></a> ';
 
 		this.$el.append( Mustache.render( html ) );
 

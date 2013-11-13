@@ -38,8 +38,8 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div id="{{prefix}}-navigation"></div>\
 			<div id="{{prefix}}-search-results"></div>\
 		</div>\
-		<div id="{{prefix}}-right-col">\
-		</div>\
+		<!--div id="{{prefix}}-right-col">\
+		</div-->\
 	',
 
 	//TODO: customize how the results will be rendered.
@@ -51,13 +51,15 @@ var esbbSimpleAppView = Backbone.View.extend({
 			{{#_source.aginfra_eu.lom_general_title_string_type}}\
 				<h4>{{value}}</h4>\
 			{{/_source.aginfra_eu.lom_general_title_string_type}}\
+			<br>\
 			{{#_source.aginfra_eu.lom_general_description_string_type}}\
-				<div>{{value}}</div>\
+				<div>* {{value}}</div>\
 			{{/_source.aginfra_eu.lom_general_description_string_type}}\
-			\
+			<br>\
 			{{#_source.aginfra_eu.lom_technical_location_type}}\
 				<div><a href="{{value}}" target="_blank">{{value}}</a> <img src="img/download.png"></div>\
 			{{/_source.aginfra_eu.lom_technical_location_type}}\
+			<br>\
 			<div>Context:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_educational_context_value_type}}\
@@ -79,7 +81,7 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div>Authors:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
-					<li><a href="#" onclick="return openSNV(\'{{value}}\');" target="_blank">{{value}}</a></li>\
+					<li>{{value}} <a href="#" onclick="return openSNV(\'{{value}}\');" target="_blank"><img src="img/network.png" /></a></li>\
 				{{/_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
 			</ul>\
 		</div>\
@@ -107,13 +109,23 @@ var esbbSimpleAppView = Backbone.View.extend({
 		new esbbSearchBarView( { 
 			model: this.query,
 			el: '#' + this.options.id_prefix + '-search-bar',
-			headerName: 'Simple Search:'
+			headerName: 'Query:'
 		} );
 		new esbbSearchFilterSelectView( { 
 			model: this.query, 
 			el: '#' + this.options.id_prefix + '-search-filters',
 			//TODO: fields that will appear in autocomplete (full syntax is "author:gibrown", so this is really just a hit to the user
-			avail_fields: [ 'context:other', 'language:es','language:en','language:hu', 'format:', 'dataset:' ]
+			avail_fields: [ 'context:education', 'language:es','language:en', 'format:pdf', 'dataset:organic.edunet' ],
+			map_table : {		"context":"aginfra_eu.lom_educational_context_value_type.value",
+								"format":"aginfra_eu.lom_technical_format_type.value",
+								"language":"aginfra_eu.lom_general_language_type.value",
+								"dataset":"aginfra_eu.dataset.value"
+			},
+			map_table_inv : {	"aginfra_eu.lom_educational_context_value_type.value":"context",
+								"aginfra_eu.lom_technical_format_type.value":"format",
+								"aginfra_eu.lom_general_language_type.value":"language",
+								"aginfra_eu.dataset.value:":"dataset"
+			}
 		} );
 		/*new esbbSearchDateRangePickerView( { 
 			model: this.query,
@@ -146,7 +158,7 @@ var esbbSimpleAppView = Backbone.View.extend({
 		new esbbNavigationView( {
 			model: this.query, 
 			el: '#' + this.options.id_prefix + '-navigation' ,
-			headerName: 'Navigate | ',
+			headerName: 'Navigation',
 		} );
 
 		//TODO: instantiate the desired left column elements and connect to the proper element ids

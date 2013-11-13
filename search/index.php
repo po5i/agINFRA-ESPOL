@@ -98,8 +98,8 @@ esbbSimpleSearchQuery.resultsModel = esbbSimpleSearchResults;
 
 //TODO: define the url for your ES endpoint, index name, and doc type name
 esbbSimpleSearchQuery.ajax_url = 'http://<?php echo $HOST ?>/search/endpoint.php';
-esbbSimpleSearchQuery.index = 'aginfra_ds';
-esbbSimpleSearchQuery.index_type = 'aginfra_ds';
+esbbSimpleSearchQuery.index = '<?php echo $ES_INDEX ?>';
+esbbSimpleSearchQuery.index_type = '<?php echo $ES_INDEX ?>';
 
 	var esbbSimpleApp = new esbbSimpleAppView( { 
 		model: esbbSimpleSearchResults, 
@@ -116,18 +116,31 @@ esbbSimpleSearchQuery.index_type = 'aginfra_ds';
 <style type="text/css">#wrapper-menu{width:330px;margin:0 auto;}</style>
 
 
-<link rel="stylesheet" href="windowfiles/dhtmlwindow.css" type="text/css" />
-<script type="text/javascript" src="windowfiles/dhtmlwindow.js"></script>
+
+<!-- BEGIN:Social network visualization -->
+<!--link rel="stylesheet" href="windowfiles/dhtmlwindow.css" type="text/css" />
+<script type="text/javascript" src="windowfiles/dhtmlwindow.js"></script-->
 <script>
-	function openSNV(center){
-		console.log(center);
-		var googlewin=dhtmlwindow.open("googlebox", "iframe", "http://<?php echo $HOST ?>/snv/snvd3.php?center="+center+"&entity=person", "Social Network of "+center, "width=610px,height=370px,resize=1,scrolling=1,center=1,frameborder=0", "recal")
-		/*googlewin.onclose=function(){ //Run custom code when window is being closed (return false to cancel action):
-			return window.confirm("Close window 1?")
-		}*/
+	function openSNV(center,container_id){
+		//console.log(center);
+		container = $("#snv_"+container_id);		
+		container.empty();
+		html_header = '<div onclick="closeSNV(\''+center+'\',\''+container_id+'\')" class="close_snv"><img src="img/close.png" /></div>';
+		html_iframe = '<iframe frameborder="0" src="http://<?php echo $HOST ?>/snv/snvd3.php?center='+center+'&entity=person" width="100%" height="600" style="width:100%;height:400px;"></iframe>';
+		container.html(html_header+html_iframe);
+
+		container.show( "fast", function() {});
+		//var googlewin=dhtmlwindow.open("googlebox", "iframe", "http://<?php echo $HOST ?>/snv/snvd3.php?center="+center+"&entity=person", "Social Network of "+center, "width=610px,height=370px,resize=1,scrolling=1,center=1,frameborder=0", "recal")
 		return false;
 	}
-</script>	
+	function closeSNV(center,container_id){
+		container = $("#snv_"+container_id);
+		container.hide( "fast", function() {});
+		container.empty();		
+		return false;
+	}
+</script>
+<!-- END: Social network visualization -->
 </head>
 
 
@@ -139,7 +152,7 @@ esbbSimpleSearchQuery.index_type = 'aginfra_ds';
 
 	<!-- aginfra -->
 	<div style="clear:both;"></div>
-	<div style="text-align:center;padding:10px;margin:0 auto;">
+	<div class="ag_footer">
 		<img src="img/EUflag_logo.jpg">
 		<img src="img/e-infrastructure_logo.jpg">
 		<img src="img/FP7_capacities_logo.jpg">

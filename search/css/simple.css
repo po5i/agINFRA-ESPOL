@@ -267,3 +267,21 @@ div#esbb-simple-navigation a{
 	text-align: center;
 	color:white;
 }
+
+.snv_inline {
+	margin : 10px;
+}
+
+.close_snv {
+	z-index: 100;
+	position: absolute;
+	right:25px;
+	cursor:pointer;
+}
+
+.ag_footer {
+	text-align:center;
+	padding:10px;
+	margin:0 auto;
+}
+

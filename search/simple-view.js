@@ -57,7 +57,7 @@ var esbbSimpleAppView = Backbone.View.extend({
 			{{/_source.aginfra_eu.lom_general_description_string_type}}\
 			<br>\
 			{{#_source.aginfra_eu.lom_technical_location_type}}\
-				<div><a href="{{value}}" target="_blank">{{value}}</a> <img src="img/download.png"></div>\
+				<div><a href="{{value}}" target="_blank" title="Go to resource">{{value}}</a> <img src="img/download.png"></div>\
 			{{/_source.aginfra_eu.lom_technical_location_type}}\
 			<br>\
 			<div>Context:</div>\
@@ -75,15 +75,16 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div>Language:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_general_language_type}}\
-					<li><img src="img/flags/{{value}}.png"></li>\
+					<li><img src="img/flags/{{value}}.png" alt="{{value}}"></li>\
 				{{/_source.aginfra_eu.lom_general_language_type}}\
 			</ul>\
 			<div>Authors:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
-					<li>{{value}} <a href="#" onclick="return openSNV(\'{{value}}\');" target="_blank"><img src="img/network.png" /></a></li>\
+					<li>{{value}} <a href="#" onclick="return openSNV(\'{{value}}\',\'{{_source._id}}\');" title="View Network" target="_blank"><img src="img/network.png" alt="View Network" /></a></li>\
 				{{/_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
 			</ul>\
+			<div class="snv_inline" id="snv_{{_source._id}}" style="display:none;"></div>\
 		</div>\
 		{{/hits}}\
 		',

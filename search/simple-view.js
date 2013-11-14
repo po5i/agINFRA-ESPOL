@@ -184,7 +184,7 @@ var esbbSimpleAppView = Backbone.View.extend({
 			model: this.model,
 			template: '\
 				{{#items}}\
-					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em>{{name}}<span>{{perc}}%</span></a></li>\
+					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em><img src="img/flags/{{name}}.png"> {{name}}<span>{{perc}}%</span></a></li>\
 				{{/items}}\
 				{{^items}}\
 					<li><a href="#"><em>01</em>None<span>0%</span></a></li>\

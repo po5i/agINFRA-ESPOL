@@ -110,8 +110,8 @@ a.esbb-search-button {
 	width: 50%;
 	margin-right: 5px;
 	border: 1px solid #aaa;
-	height: 33px;
-	font-size:24px;
+	height: 25px;
+	font-size:20px;
 
 	background-color: #fff;
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
@@ -130,6 +130,7 @@ a.esbb-search-button {
 #esbb-simple-search-filters div.select2-container {
 	vertical-align: middle;
 	width:50%;
+	margin-left: -3px;	/* ghost space to the left FIX */
 }
 #esbb-simple-search-results h3, #esbb-simple-search-results h4  {
 	margin-top: 0;

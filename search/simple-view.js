@@ -63,13 +63,13 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div>Context:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_educational_context_value_type}}\
-					<li>{{value}}</li>\
+					<li style="border:none;">{{value}}</li>\
 				{{/_source.aginfra_eu.lom_educational_context_value_type}}\
 			</ul>\
 			<div>Format:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_technical_format_type}}\
-					<li>{{value}}</li>\
+					<li style="border:none;">{{value}}</li>\
 				{{/_source.aginfra_eu.lom_technical_format_type}}\
 			</ul>\
 			<div>Language:</div>\
@@ -81,7 +81,7 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div>Authors:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
-					<li>{{value}} <a href="#" onclick="return openSNV(\'{{value}}\',\'{{_source._id}}\');" title="View Network" target="_blank"><img src="img/network.png" alt="View Network" /></a></li>\
+					<li><a href="#" onclick="return openSNV(\'{{value}}\',\'{{_source._id}}\');" title="View Network" target="_blank">{{value}} <img src="img/network.png" alt="View Network" /></a></li>\
 				{{/_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
 			</ul>\
 			<div class="snv_inline" id="snv_{{_source._id}}" style="display:none;"></div>\

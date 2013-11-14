@@ -26,7 +26,9 @@ try {
    $links = array();
    $idx = 0;
 
-   foreach($view["rows"] as $idkeyvalue){        
+   foreach($view["rows"] as $idkeyvalue){     
+
+        $idx_1 = $idx_2 = $idx_3 = 0;
 
         $key_authors = explode("+", $idkeyvalue["key"]);
 

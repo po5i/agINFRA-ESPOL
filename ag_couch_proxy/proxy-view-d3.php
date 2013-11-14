@@ -44,19 +44,22 @@ try {
           $idx_1 = $keys[0];
         }
 
-        if($key_authors[1] == $center)
-          $group = 1;
-        else
-          $group = 2;
-        $node = array("name" => $key_authors[1],"group"=>$group);
-        if(array_search($node, $nodes) === false){
-          $idx_2 = ++$idx;
-          $nodes[$idx_2] = $node;
+        if(isset($key_authors[1])) {
+          if($key_authors[1] == $center)
+            $group = 1;
+          else
+            $group = 2;
+          $node = array("name" => $key_authors[1],"group"=>$group);
+          if(array_search($node, $nodes) === false){
+            $idx_2 = ++$idx;
+            $nodes[$idx_2] = $node;
+          }
+          else{
+            $keys = array_keys($nodes,$node);
+            $idx_2 = $keys[0];
+          }
         }
-        else{
-          $keys = array_keys($nodes,$node);
-          $idx_2 = $keys[0];
-        }
+          
 
         if($mode == "full"){
           if($idkeyvalue["value"] == $center)

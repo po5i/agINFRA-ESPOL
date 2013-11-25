@@ -60,11 +60,14 @@ try {
 
           $sql = "SELECT * FROM datasets WHERE dataset_id = '{$value["id"]}'";
           $ret = $db->query($sql);
+          $insert = true;
           if($row = $ret->fetchArray(SQLITE3_ASSOC)){
-            continue;
+            $insert = false;
+            if($row["dataset_id"] == $value["id"])
+              continue;
           } 
-          else {
-            //insert
+
+          if($insert){
             $sql = "INSERT INTO datasets(filename,name,dataset_id) VALUES('$location','$name','{$value["id"]}')";
             $ret = $db->exec($sql);
           }

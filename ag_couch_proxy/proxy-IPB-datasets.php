@@ -94,7 +94,7 @@ try {
           }
 
           //download
-          if(file_exists($path)) {
+          if(!file_exists($path)) {
             $fp = fopen($path, 'w');
             if($fp){
               $ch = curl_init($location);

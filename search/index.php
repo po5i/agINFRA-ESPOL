@@ -126,7 +126,7 @@ esbbSimpleSearchQuery.index_type = '<?php echo $ES_INDEX ?>';
 		container = $("#snv_"+container_id);		
 		container.empty();
 		html_header = '<div onclick="closeSNV(\''+center+'\',\''+container_id+'\')" class="close_snv"><img src="img/close.png" /></div>';
-		html_iframe = '<iframe frameborder="0" src="http://<?php echo $HOST ?>/snv/snvd3.php?center='+center+'&entity=person&graphtype=PersonGraph" width="100%" height="600" style="width:100%;height:400px;"></iframe>';
+		html_iframe = '<iframe frameborder="0" src="http://<?php echo $HOST ?>/snv/snvd3.php?center='+center+'&entity=person&graphtype=PersonGraph" width="100%" height="600" style="width:100%;height:400px;" allowFullScreen></iframe>';
 		container.html(html_header+html_iframe);
 
 		container.show( "fast", function() {});

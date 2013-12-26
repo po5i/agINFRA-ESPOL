@@ -4,7 +4,9 @@ if(isset($_GET["center"]))
   $center = $_GET["center"]; 
 else
   $center = "Salvador%20Sanchez-Alonso";
-$center = utf8_encode($center);
+
+if(mb_detect_encoding($center) != "UTF-8")
+  $center = utf8_encode($center);
 ?>
 <!DOCTYPE html>
 <html>
@@ -29,11 +31,18 @@ $center = utf8_encode($center);
   }
 
   #left_snv {
-    float:left;width:160px;height:100%;border-right:solid thin gray;
+    /*float:left;*/
+    position: absolute;
+    width:160px;
+    /*height:100%;*/
+    border-right:solid thin gray;
+    background: #ffffff;
   }
 
-  #main_snv {
-    float:right;width:440px;height:100%;
+  #main_snv, #main_svg {
+    /*float:right;*/
+    width:100%;
+    height:100%;
   }
 
   </style>
@@ -45,13 +54,88 @@ $center = utf8_encode($center);
   <link href="dist/tipsy.css" rel="stylesheet" type="text/css" />
 
   <link rel="stylesheet" href="../search/css/accordionmenu.css" type="text/css" media="screen" />
+
+  <script>
+  /* 
+  Native FullScreen JavaScript API
+  -------------
+  Assumes Mozilla naming conventions instead of W3C for now
+  */
+
+  (function() {
+    var 
+      fullScreenApi = { 
+        supportsFullScreen: false,
+        isFullScreen: function() { return false; }, 
+        requestFullScreen: function() {}, 
+        cancelFullScreen: function() {},
+        fullScreenEventName: '',
+        prefix: ''
+      },
+      browserPrefixes = 'webkit moz o ms khtml'.split(' ');
+    
+    // check for native support
+    if (typeof document.cancelFullScreen != 'undefined') {
+      fullScreenApi.supportsFullScreen = true;
+    } else {   
+      // check for fullscreen support by vendor prefix
+      for (var i = 0, il = browserPrefixes.length; i < il; i++ ) {
+        fullScreenApi.prefix = browserPrefixes[i];
+        
+        if (typeof document[fullScreenApi.prefix + 'CancelFullScreen' ] != 'undefined' ) {
+          fullScreenApi.supportsFullScreen = true;
+          
+          break;
+        }
+      }
+    }
+    
+    // update methods to do something useful
+    if (fullScreenApi.supportsFullScreen) {
+      fullScreenApi.fullScreenEventName = fullScreenApi.prefix + 'fullscreenchange';
+      
+      fullScreenApi.isFullScreen = function() {
+        switch (this.prefix) {  
+          case '':
+            return document.fullScreen;
+          case 'webkit':
+            return document.webkitIsFullScreen;
+          default:
+            return document[this.prefix + 'FullScreen'];
+        }
+      }
+      fullScreenApi.requestFullScreen = function(el) {
+        return (this.prefix === '') ? el.requestFullScreen() : el[this.prefix + 'RequestFullScreen']();
+      }
+      fullScreenApi.cancelFullScreen = function(el) {
+        return (this.prefix === '') ? document.cancelFullScreen() : document[this.prefix + 'CancelFullScreen']();
+      }   
+    }
+
+    // jQuery plugin
+    if (typeof jQuery != 'undefined') {
+      jQuery.fn.requestFullScreen = function() {
+    
+        return this.each(function() {
+          var el = jQuery(this);
+          if (fullScreenApi.supportsFullScreen) {
+            fullScreenApi.requestFullScreen(el);
+          }
+        });
+      };
+    }
+
+    // export api
+    window.fullScreenApi = fullScreenApi; 
+  })();
+
+  </script>
 <head>
 
 
 
 <body>
   
-
   <div id="left_snv">
     <img src="img/userprofile.png" style="width:159px;height:159px;border:solid thin gray;">
     <div class="center_name"><?php echo $center ?></div>
@@ -72,6 +156,10 @@ $center = utf8_encode($center);
         <ul class="sub-menu" id="publications_sub">
           <!--li><a href="#"><em>01</em>Sub Menu<span>1</span></a></li-->
         </ul>
+      </li>
+
+      <li class="sign">
+        <a id="fsbutton" href="#">Go Fullscreen</a>
       </li>
             
     </ul>
@@ -139,6 +227,51 @@ $center = utf8_encode($center);
               }
             }); 
 
+      /////////////////////////////////////
+      //fullscreen
+      // do something interesting with fullscreen support
+      var fsButton = document.getElementById('fsbutton'),
+        fsElement = document.getElementById('main_svg');
+      var w = window,
+        d = document,
+        e = d.documentElement,
+        g = d.getElementsByTagName('body')[0];
+
+      if (window.fullScreenApi.supportsFullScreen) {
+        // handle button click
+        fsButton.addEventListener('click', function() {
+          window.fullScreenApi.requestFullScreen(fsElement);
+        }, true);
+        
+        fsElement.addEventListener(fullScreenApi.fullScreenEventName, function() {
+          if (fullScreenApi.isFullScreen()) {
+            //fsStatus.innerHTML = 'Whoa, you went fullscreen';
+
+            /*x = w.innerWidth || e.clientWidth || g.clientWidth;
+            y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+            //fsElement.attr("width", x).attr("height", y);
+            fsElement.width = x;
+            fsElement.height = y;*/
+          } else {
+            //fsStatus.innerHTML = 'Back to normal';
+
+            //fsElement.attr("width", "440").attr("height", "370");
+          }
+        }, true);
+        
+      } else {
+        //fsStatus.innerHTML = 'SORRY: Your browser does not support FullScreen';
+      }
+      /*function updateWindow(){
+          x = w.innerWidth || e.clientWidth || g.clientWidth;
+          y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+
+          fsElement.attr("width", x).attr("height", y);
+      }
+      window.onresize = updateWindow;*/
+
+
+
     });
   </script>
 
@@ -154,24 +287,38 @@ $center = utf8_encode($center);
 
 
 
+
+
+
   <script>
 
   function drawSNV(mode){
     var width = "440",
-        height = "370";
+        height = "440";
 
     var color = d3.scale.category10();
 
     var force = d3.layout.force()
         .charge(-120)
-        .linkDistance(100)
+        //.linkDistance(100)
+        .linkDistance(function(d) {
+          //console.log(d); 
+          distance = (1/d.value)*200;
+          return distance;      //number of relationships found between these two nodes in the dataset
+        })
         .size([width, height]);
 
     //var svg = d3.select("body").append("svg")
     $("#main_snv").empty();    
     var svg = d3.select("#main_snv").append("svg")
+        .attr("id", "main_svg")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        //.attr("width", "100%")
+        //.attr("height", "100%")
+        .attr("viewBox", "0 0 640 480")
+        .attr("preserveAspectRatio", "xMidYMid meet");
+
 
     d3.json("http://<?php echo $HOST ?>/ag_couch_proxy/proxy-view-d3.php?center=<?php echo $center ?>&mode="+mode, function(error, graph) {
       force
@@ -197,6 +344,14 @@ $center = utf8_encode($center);
             .call(force.drag)
             .on("mouseover", fade(.1))    //highlight
             .on("mouseout", fade(1));     //highlight
+
+      node.on("dblclick", function(d) {
+                                        //console.log(d);
+                                        if(d.group == 2){
+                                          location.href = "snvd3.php?center="+d.name+"&entity=person&graphtype=PersonGraph"; 
+                                          //console.log("snvd3.php?center="+d.name+"&graphtype=PersonGraph");
+                                        }
+      });  //double click
 
       node.append("title")
           .text(function(d) { return d.name; });
@@ -269,5 +424,12 @@ $center = utf8_encode($center);
   }
 
   </script>
+
+
+
+
+
+  
+
 </body>
 </html>

@@ -39,10 +39,15 @@ if(mb_detect_encoding($center) != "UTF-8")
     background: #ffffff;
   }
 
-  #main_snv, #main_svg {
+  #main_svg {
     /*float:right;*/
     width:100%;
-    height:100%;
+    /*height:100%;*/
+  }
+  #main_snv {
+    /*float:right;*/
+    /*width:100%;*/
+    /*height:100%;*/
   }
 
   </style>
@@ -245,17 +250,29 @@ if(mb_detect_encoding($center) != "UTF-8")
         
         fsElement.addEventListener(fullScreenApi.fullScreenEventName, function() {
           if (fullScreenApi.isFullScreen()) {
+            console.log("fullScreen");
             //fsStatus.innerHTML = 'Whoa, you went fullscreen';
 
-            /*x = w.innerWidth || e.clientWidth || g.clientWidth;
-            y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+            x = /*w.innerWidth || e.clientWidth ||*/ g.clientWidth;
+            y = /*w.innerHeight|| e.clientHeight||*/ g.clientHeight;
             //fsElement.attr("width", x).attr("height", y);
-            fsElement.width = x;
-            fsElement.height = y;*/
+            
+            //$("#main_snv").css("width",x);
+            //$("#main_snv").css("height",y);
+            //fsContainer.width = x;
+            //fsContainer.height = y;
+            $("#main_svg").css("width",x);
+            
           } else {
+            console.log("Normal");
             //fsStatus.innerHTML = 'Back to normal';
 
-            //fsElement.attr("width", "440").attr("height", "370");
+            x = /*w.innerWidth || e.clientWidth ||*/ g.clientWidth;
+            y = /*w.innerHeight|| e.clientHeight||*/ g.clientHeight;
+            //fsElement.attr("width", x).attr("height", y);
+            
+            $("#main_svg").css("width",x);
+
           }
         }, true);
         
@@ -282,7 +299,7 @@ if(mb_detect_encoding($center) != "UTF-8")
 
 
 
-  <div style="clear:both"></div>
+  <!--div style="clear:both"></div-->
 
 
 
@@ -293,8 +310,8 @@ if(mb_detect_encoding($center) != "UTF-8")
   <script>
 
   function drawSNV(mode){
-    var width = "440",
-        height = "440";
+    var width = "640",
+        height = "480";
 
     var color = d3.scale.category10();
 
@@ -312,11 +329,11 @@ if(mb_detect_encoding($center) != "UTF-8")
     $("#main_snv").empty();    
     var svg = d3.select("#main_snv").append("svg")
         .attr("id", "main_svg")
-        .attr("width", width)
-        .attr("height", height)
+        //.attr("width", width)
+        //.attr("height", height)
         //.attr("width", "100%")
         //.attr("height", "100%")
-        .attr("viewBox", "0 0 640 480")
+        //.attr("viewBox", "0 0 640 480")
         .attr("preserveAspectRatio", "xMidYMid meet");
 
 
@@ -333,6 +350,9 @@ if(mb_detect_encoding($center) != "UTF-8")
           .attr("class", "link")
           .style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
+      var drag = force.drag()
+          .on("dragstart", dragstart);
+
       var node = svg.selectAll(".node")
           .data(graph.nodes)
           .enter().append("circle")
@@ -341,7 +361,8 @@ if(mb_detect_encoding($center) != "UTF-8")
             .style("fill", function(d) { return color(d.group); })
             //.on("click", function(d,i) { alert(d.name); })
             //.on("mouseover", function(d,i) { console.log(d.name); })
-            .call(force.drag)
+            //.call(force.drag) //use default force drag
+            .call(drag)         //let the user drag the nodes and distances
             .on("mouseover", fade(.1))    //highlight
             .on("mouseout", fade(1));     //highlight
 
@@ -382,6 +403,10 @@ if(mb_detect_encoding($center) != "UTF-8")
         graph.links.forEach(function(d) {
             linkedByIndex[d.source.index + "," + d.target.index] = 1;
         });
+
+      function dragstart(d) {
+        d3.select(this).classed("fixed", d.fixed = true);
+      }
 
       
       function isConnected(a, b) {

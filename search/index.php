@@ -118,8 +118,6 @@ esbbSimpleSearchQuery.index_type = '<?php echo $ES_INDEX ?>';
 
 
 <!-- BEGIN:Social network visualization -->
-<!--link rel="stylesheet" href="windowfiles/dhtmlwindow.css" type="text/css" />
-<script type="text/javascript" src="windowfiles/dhtmlwindow.js"></script-->
 <script>
 	function openSNV(center,container_id){
 		//console.log(center);

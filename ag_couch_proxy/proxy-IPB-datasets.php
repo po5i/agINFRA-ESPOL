@@ -15,7 +15,7 @@ require_once 'lib/couchDocument.php';
 
 $debug = false;
 
-class MyDB extends SQLite3
+/*class MyDB extends SQLite3
  {
     function __construct()
     {
@@ -25,7 +25,7 @@ class MyDB extends SQLite3
  $db = new MyDB();
  if(!$db){
     echo $db->lastErrorMsg();
- }
+ }*/
 
 
 // set a new connector to the CouchDB server
@@ -58,7 +58,7 @@ try {
           
           //$view_filtered[] = $location;
 
-          $sql = "SELECT * FROM datasets WHERE dataset_id = '{$value["id"]}'";
+          /*$sql = "SELECT * FROM datasets WHERE dataset_id = '{$value["id"]}'";
           $ret = $db->query($sql);
           $insert = true;
           if($row = $ret->fetchArray(SQLITE3_ASSOC)){
@@ -69,8 +69,8 @@ try {
 
           if($insert){
             $sql = "INSERT INTO datasets(filename,name,dataset_id) VALUES('$location','$name','{$value["id"]}')";
-            $ret = $db->exec($sql);
-          }
+            @$ret = $db->exec($sql);
+          }*/
 
 
 
@@ -103,7 +103,7 @@ try {
               curl_close($ch);
               fclose($fp);
             }
-          } 
+          }
         }
    }
 
@@ -111,6 +111,6 @@ try {
 } catch (Exception $e) {
    echo "something weird happened: ".$e->getMessage()."<BR>\n";
 }
-$db->close();
+//$db->close();
 
 ?>

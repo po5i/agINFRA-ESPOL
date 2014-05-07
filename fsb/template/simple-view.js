@@ -14,23 +14,7 @@ var esbbSimpleAppView = Backbone.View.extend({
 		</div>\
 		<div id="{{prefix}}-left-col">\
 			<ul class="accordion">\
-				<li class="files">\
-					<a href="#">Context<span>100%</span></a>\
-					<ul class="sub-menu" id="{{prefix}}-context-selector"></ul>\
-				</li>\
-				<li class="mail">\
-					<a href="#">Language<span>100%</span></a>\
-					<ul class="sub-menu" id="{{prefix}}-language-selector"></ul>\
-				</li>\
-				<li class="cloud">\
-					<a href="#">Dataset<span>100%</span></a>\
-					<ul class="sub-menu" id="{{prefix}}-dataset-selector"></ul>\
-				</li>\
-				<li class="sign">\
-					<a href="#">Format<span>100%</span></a>\
-					<ul class="sub-menu" id="{{prefix}}-format-selector"></ul>\
-				</li>\
-			</ul>\
+				[facet_accordion]			</ul>\
 		</div>\
 		<div id="{{prefix}}-center-col">\
 			<div id="{{prefix}}-timeline" class="esbb-timeline" style="display:none"></div>\
@@ -57,7 +41,7 @@ var esbbSimpleAppView = Backbone.View.extend({
 			{{/_source.aginfra_eu.lom_general_description_string_type}}\
 			<br>\
 			{{#_source.aginfra_eu.lom_technical_location_type}}\
-				<div><a href="{{value}}" target="_blank" title="Go to resource">{{value}}</a> <img src="img/download.png"></div>\
+				<div><a href="{{value}}" target="_blank" title="Go to resource">{{value}}</a> <img src="../../search/img/download.png"></div>\
 			{{/_source.aginfra_eu.lom_technical_location_type}}\
 			<br>\
 			<div>Context:</div>\
@@ -75,13 +59,13 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div>Language:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_general_language_type}}\
-					<li><img src="img/flags/{{value}}.png" alt="{{value}}"></li>\
+					<li><img src="../../search/img/flags/{{value}}.png" alt="{{value}}"></li>\
 				{{/_source.aginfra_eu.lom_general_language_type}}\
 			</ul>\
 			<div>Authors:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
-					<li><a href="#" onclick="return openSNV(\'{{value}}\',\'{{_source._id}}\');" title="View Network" target="_blank">{{value}} <img src="img/network.png" alt="View Network" /></a></li>\
+					<li><a href="#" onclick="return openSNV(\'{{value}}\',\'{{_source._id}}\');" title="View Network" target="_blank">{{value}} <img src="../../search/img/network.png" alt="View Network" /></a></li>\
 				{{/_source.aginfra_eu.lom_lifecycle_contribute_entity_type}}\
 			</ul>\
 			<div class="snv_inline" id="snv_{{_source._id}}" style="display:none;"></div>\
@@ -176,78 +160,8 @@ var esbbSimpleAppView = Backbone.View.extend({
 			searchQueryModel: this.query,
 			model: this.model
 		} );*/
-		new esbbSearchFacetSelectView( { 
-			facetName: 'aginfra_eu.lom_general_language_type.value',
-			headerName: 'Language',
-			el: '#' + this.options.id_prefix + '-language-selector',
-			searchQueryModel: this.query,
-			model: this.model,
-			template: '\
-				{{#items}}\
-					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em><img src="img/flags/{{name}}.png"> {{name}}<span>{{perc}}%</span></a></li>\
-				{{/items}}\
-				{{^items}}\
-					<li><a href="#"><em>01</em>None<span>0%</span></a></li>\
-				{{/items}}\
-				',
-			templateNoResults: '\
-					<li><a href="#"><em>0</em>No Results<span>0%</span></a></li>\
-				',
-		} );
-		new esbbSearchFacetSelectView( { 
-			facetName: 'aginfra_eu.lom_educational_context_value_type.value',
-			headerName: 'Context',
-			el: '#' + this.options.id_prefix + '-context-selector',
-			searchQueryModel: this.query,
-			model: this.model,
-			template: '\
-				{{#items}}\
-					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em>{{name}}<span>{{perc}}%</span></a></li>\
-				{{/items}}\
-				{{^items}}\
-					<li><a href="#"><em>01</em>None<span>0%</span></a></li>\
-				{{/items}}\
-				',
-			templateNoResults: '\
-					<li><a href="#"><em>0</em>No Results<span>0%</span></a></li>\
-				',
-		} );
-		new esbbSearchFacetSelectView( { 
-			facetName: 'aginfra_eu.lom_technical_format_type.value',
-			headerName: 'Format',
-			el: '#' + this.options.id_prefix + '-format-selector',
-			searchQueryModel: this.query,
-			model: this.model,
-			template: '\
-				{{#items}}\
-					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em>{{name}}<span>{{perc}}%</span></a></li>\
-				{{/items}}\
-				{{^items}}\
-					<li><a href="#"><em>01</em>None<span>0%</span></a></li>\
-				{{/items}}\
-				',
-			templateNoResults: '\
-					<li><a href="#"><em>0</em>No Results<span>0%</span></a></li>\
-				',
-		} );
-		new esbbSearchFacetSelectView( { 
-			facetName: 'aginfra_eu.dataset.value',
-			headerName: 'Dataset',
-			el: '#' + this.options.id_prefix + '-dataset-selector',
-			searchQueryModel: this.query,
-			model: this.model,
-			template: '\
-				{{#items}}\
-					<li><a class="esbb-facet-item" href="{{name}}"><em>{{count}}</em>{{name}}<span>{{perc}}%</span></a></li>\
-				{{/items}}\
-				{{^items}}\
-					<li><a href="#"><em>01</em>None<span>0%</span></a></li>\
-				{{/items}}\
-				',
-			templateNoResults: '\
-					<li><a href="#"><em>0</em>No Results<span>0%</span></a></li>\
-				',
-		} );
+		
+		[facet_select_view]
 		
 	}
 

@@ -7,6 +7,8 @@ else
 
 if(mb_detect_encoding($center) != "UTF-8")
   $center = utf8_encode($center);
+
+$graphtype = isset($_REQUEST["graphtype"]) ? $_REQUEST["graphtype"] : "PersonGraph";  //PersonGraph|InstitutionGraph|ProjectGraph|PaperGraph|CountryGraph
 ?>
 <!DOCTYPE html>
 <html>
@@ -148,10 +150,12 @@ if(mb_detect_encoding($center) != "UTF-8")
       
       <!-- mode-->
       <li class="cloud">
-        <a href="#">Graph mode</a>
+        <a href="#">Graph filtering</a>
         <ul class="sub-menu" id="mode_sub">
           <li><a href="#" onclick="return refreshFull()" style="padding-left:5px">Full</a></li>
           <li><a href="#" onclick="return refreshSimple()" style="padding-left:5px">Only co-authorship</a></li>
+          <li><a href="#" onclick="return refreshLanguage()" style="padding-left:5px">Languages</a></li>
+          <li><a href="#" onclick="return refreshFormat()" style="padding-left:5px">Format of papers</a></li>
         </ul>
       </li>
 
@@ -172,12 +176,22 @@ if(mb_detect_encoding($center) != "UTF-8")
   <script type="text/javascript">
 
     function refreshFull(){
-      drawSNV("full");
+      drawSNV("PersonGraph","full");
       return false;
     }
 
     function refreshSimple(){
-      drawSNV("simple");
+      drawSNV("PersonGraph","simple");
+      return false;
+    }
+
+    function refreshLanguage(){
+      drawSNV("LanguageGraph","full");
+      return false;
+    }
+
+    function refreshFormat(){
+      drawSNV("FormatGraph","full");
       return false;
     }
 
@@ -185,7 +199,7 @@ if(mb_detect_encoding($center) != "UTF-8")
       
       ///////////////////////////////////////
       //main
-      drawSNV("full");
+      drawSNV("PersonGraph","full");
 
       ///////////////////////////////////////
       //Accordion
@@ -309,7 +323,7 @@ if(mb_detect_encoding($center) != "UTF-8")
 
   <script>
 
-  function drawSNV(mode){
+  function drawSNV(graphtype,mode){
     var width = "640",
         height = "480";
 
@@ -337,7 +351,7 @@ if(mb_detect_encoding($center) != "UTF-8")
         .attr("preserveAspectRatio", "xMidYMid meet");
 
 
-    d3.json("http://<?php echo $HOST ?>/ag_couch_proxy/proxy-view-d3.php?center=<?php echo $center ?>&mode="+mode, function(error, graph) {
+    d3.json("http://<?php echo $HOST ?>/ag_couch_proxy/proxy-view-d3.php?center=<?php echo $center ?>&mode="+mode+"&graphtype="+graphtype, function(error, graph) {
       force
           .nodes(graph.nodes)
           .links(graph.links)

@@ -7,6 +7,7 @@ http://localhost:5984/aginfra/_design/relationships/_view/relationships
 
 $center = isset($_REQUEST["center"]) ? $_REQUEST["center"] : "";
 $mode = isset($_REQUEST["mode"]) ? $_REQUEST["mode"] : "full";  //simple|full
+$graphtype = isset($_REQUEST["graphtype"]) ? $_REQUEST["graphtype"] : "PersonGraph";  //PersonGraph|InstitutionGraph|ProjectGraph|PaperGraph|CountryGraph
 
 
 
@@ -19,7 +20,18 @@ $client = new couchClient ('http://localhost:5984',$COUCHDB_AGINFRA);
 
 // view fetching, using the view option limit
 try {
-   $view = $client->startkey($center)->endkey($center."Z")->asArray()->stale('ok')->getView('relationships','relationships');
+  if($graphtype == "PersonGraph"){
+    $view = $client->startkey($center)->endkey($center."Z")->asArray()->stale('ok')->getView('relationships','relationships');
+  }
+  if($graphtype == "FormatGraph"){
+    $view = $client->startkey($center)->endkey($center."Z")->asArray()->stale('ok')->getView('relationships','formats');
+  }
+  if($graphtype == "LanguageGraph"){
+    $view = $client->startkey($center)->endkey($center."Z")->asArray()->stale('ok')->getView('relationships','languages');
+  }
+
+
+
    $view_filtered = array();
 
    $nodes = array();

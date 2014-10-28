@@ -11,4 +11,5 @@ $HOST = "localhost/aginfra";
 $SERVER_IP = "localhost";
 
 $ES_INDEX = "aginfra_ds";
+$ES_PORT = "9200";
 ?>

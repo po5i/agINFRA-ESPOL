@@ -28,7 +28,7 @@ global $es_servers;
 $es_servers = array(
 					    'servers' => array(
 					        //array('host' => '200.126.23.173', 'port' => 9200)
-					        array('host' => $SERVER_IP, 'port' => 9200)
+					        array('host' => $SERVER_IP, 'port' => $ES_PORT)
 					    )
 					);
 

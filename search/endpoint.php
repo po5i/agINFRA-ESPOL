@@ -25,12 +25,14 @@ include "/var/www/aginfra/Elastica/Transport/Http.php";
 
 //TODO: define array of ES servers
 global $es_servers;
-$es_servers = array(
-					    'servers' => array(
+//$es_servers = array(
+//					    'servers' => array(
 					        //array('host' => '200.126.23.173', 'port' => 9200)
-					        array('host' => $SERVER_IP, 'port' => $ES_PORT)
-					    )
-					);
+//					        array('host' => $SERVER_IP, 'port' => $ES_PORT)
+//					    )
+//					);
+
+$es_servers = array('host' => $SERVER_IP, 'port' => $ES_PORT);
 
 //OPTIONAL: only allow a whitelist of particular indices and particular fields within those indices
 //  also defines highlighting and which fields to return.
@@ -61,7 +63,8 @@ if ( '' !== $type )
 //}
 
 try{
-	$esclient = new \Elastica\Client( array( 'servers' => $es_servers ) );
+	//$esclient = new \Elastica\Client( array( 'servers' => $es_servers ) );
+        $esclient = new \Elastica\Client( $es_servers  );
 	$esQ = new \Elastica\Query();
 	$esQ->setRawQuery( get_object_vars( json_decode( $query ) ) );
 	if ( isset( $whitelist_idx[ $idx_type ] ) ) {

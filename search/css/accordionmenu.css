@@ -32,10 +32,11 @@ http://rockablethemes.com
 /* Layout & Style */
 
 .accordion li > a {
+	word-break: break-all;
 	display: block;
 	position: relative;
 	min-width: 110px;
-	padding: 0 10px 0 40px;
+	padding: 0 75px 0 60px;
 	height: 32px;
 
 	color: #fdfdfd;

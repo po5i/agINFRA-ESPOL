@@ -39,17 +39,18 @@ $graphtype = isset($_REQUEST["graphtype"]) ? $_REQUEST["graphtype"] : "PersonGra
     /*height:100%;*/
     border-right:solid thin gray;
     background: #ffffff;
+    opacity: 0.75;
   }
 
   #main_svg {
     /*float:right;*/
     width:100%;
-    /*height:100%;*/
+    height:100%;
   }
   #main_snv {
     /*float:right;*/
     /*width:100%;*/
-    /*height:100%;*/
+    height:100%;
   }
 
   </style>

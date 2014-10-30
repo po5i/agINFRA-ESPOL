@@ -40,6 +40,7 @@ $graphtype = isset($_REQUEST["graphtype"]) ? $_REQUEST["graphtype"] : "PersonGra
     border-right:solid thin gray;
     background: #ffffff;
     opacity: 0.75;
+    overflow: hidden;
   }
 
   #main_svg {

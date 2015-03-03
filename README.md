@@ -9,7 +9,8 @@ Visualization components, integrated
 * You have to install CouchDB River Plugin for Elasticsearch:
   bin/plugin -install elasticsearch/elasticsearch-river-couchdb/1.3.0
 
-curl -XDELETE 'http://localhost:9200/aginfra_datasets/'
+```
+curl -XDELETE 'http://localhost:9200/aginfra_ds/'
 curl -XPUT 'http://localhost:9200/aginfra_ds/'
 curl -XPUT 'http://localhost:9200/_river/aginfra_ds/_meta' -d '{
     "type" : "couchdb",
@@ -26,7 +27,7 @@ curl -XPUT 'http://localhost:9200/_river/aginfra_ds/_meta' -d '{
         "bulk_timeout" : "10ms"
     }
 }'
-
+```
 * PHP requirements:
 php curl extension
 php sqlite extension

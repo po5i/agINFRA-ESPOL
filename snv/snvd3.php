@@ -345,8 +345,8 @@ $graphtype = isset($_REQUEST["graphtype"]) ? $_REQUEST["graphtype"] : "PersonGra
     $("#main_snv").empty();    
     var svg = d3.select("#main_snv").append("svg")
         .attr("id", "main_svg")
-        //.attr("width", width)
-        //.attr("height", height)
+        .attr("width", width)
+        .attr("height", height)
         //.attr("width", "100%")
         //.attr("height", "100%")
         //.attr("viewBox", "0 0 640 480")

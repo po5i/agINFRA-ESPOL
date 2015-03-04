@@ -12,6 +12,12 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div id="{{prefix}}-search-filters"></div>\
 			<div id="{{prefix}}-date-range"></div>\
 		</div>\
+		<div id="{{prefix}}-full-col">\
+			<div id="{{prefix}}-titlebar-generic">Germplasm Data semantic results (CRA)\
+			</div>\
+			<div id="{{prefix}}-panel-generic">\
+			</div>\
+		</div>\
 		<div id="{{prefix}}-left-col">\
 			<ul class="accordion">\
 				<li class="files">\

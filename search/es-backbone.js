@@ -1014,14 +1014,12 @@ var esbbSearchFilterTermsSelectorView = Backbone.View.extend({
 var esbbSearchBarView = Backbone.View.extend({
 	headerName: '',
 	buttonText: 'Search',
-	buttonText2: 'Get germplasm results',
 	spinner: null,
 	spin_it: false,
-	template: '<p><label>{{headerName}}</label><input class="esbb-search-query" type="text" /><a href="" class="esbb-search-button">{{buttonText}}</a> <a href="" class="esbb-germplasm-button">{{buttonText2}}</a></p>',
+	template: '<p><label>{{headerName}}</label><input class="esbb-search-query" type="text" /><a href="" class="esbb-search-button">{{buttonText}}</a></p>',
 
 	events : {
 		'click .esbb-search-button' : 'search',
-		'click .esbb-germplasm-button' : 'searchGermplasm',
 		'keyup .esbb-search-query' : 'setQuery'
 	},
 
@@ -1030,8 +1028,6 @@ var esbbSearchBarView = Backbone.View.extend({
 			this.headerName = this.options.headerName;
 		if ( this.options.buttonText )
 			this.buttonText = this.options.buttonText;
-		if ( this.options.buttonText2 )
-			this.buttonText2 = this.options.buttonText2;
 		_.bindAll( this, 'render' );
 		this.model.bind('search:start', this.startSpin, this );
 		this.model.bind('search:end', this.stopSpin, this );
@@ -1059,25 +1055,6 @@ var esbbSearchBarView = Backbone.View.extend({
 		}
 		this.model.setFrom(0);
 		this.model.search();
-	},
-
-	searchGermplasm: function( ev ) {
-		var query = this.$el.find( '.esbb-search-query' ).val();
-		var container = $( '#esbb-simple-panel-generic' );
-		console.log(query);
-		$.ajax({   
-            url: "sparql/select.php?q="+query, 
-            type: "GET", 
-            //dataType: "json", 
-            success: function(data) {
-                //console.log(data);
-                container.html(data);
-                $("#esbb-simple-full-col").show();
-            }
-        });
-
-
-		ev.preventDefault();
 	},
 
 	startSpin: function() {

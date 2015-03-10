@@ -24,7 +24,6 @@ LIMIT 30
 //print_r($r);
 //echo "</pre>";
 
-echo '<div id="close-germplasm" onclick="$(\'#esbb-simple-full-col\').hide();"><img src="img/close.png"></div>';
 
 if(empty($r)){
 	echo "There are no germplasm data to display for $q";

@@ -6,10 +6,10 @@ $COUCHDB_AGRIS = "agris_testing";
 //$COUCHDB_AGRIS = "agris";
 
 //SNV
-$COUCH = "aginfra.cti.espol.edu.ec:5984";
-$HOST = "aginfra.cti.espol.edu.ec/aginfra";
-$SERVER_IP = "aginfra.cti.espol.edu.ec";
+$COUCH = "localhost:5984";
+$HOST = "localhost/aginfra";
+$SERVER_IP = "localhost";
 
 $ES_INDEX = "aginfra_ds";
-$ES_PORT = "9201";
+$ES_PORT = "9200";
 ?>

@@ -12,12 +12,6 @@ var esbbSimpleAppView = Backbone.View.extend({
 			<div id="{{prefix}}-search-filters"></div>\
 			<div id="{{prefix}}-date-range"></div>\
 		</div>\
-		<div id="{{prefix}}-full-col">\
-			<div id="{{prefix}}-titlebar-generic">Germplasm Data semantic results (CRA)\
-			</div>\
-			<div id="{{prefix}}-panel-generic">\
-			</div>\
-		</div>\
 		<div id="{{prefix}}-left-col">\
 			<ul class="accordion">\
 				<li class="files">\
@@ -66,6 +60,25 @@ var esbbSimpleAppView = Backbone.View.extend({
 				<div><a href="{{value}}" target="_blank" title="Go to resource">{{value}}</a> <img src="img/download.png"></div>\
 			{{/_source.aginfra_eu.lom_technical_location_type}}\
 			<br>\
+			{{#_source.aginfra_eu.lom_general_keyword_string_type.0}}<div>Keywords:</div>{{/_source.aginfra_eu.lom_general_keyword_string_type.0}}	\
+			<ul class="facets-results">\
+				{{#_source.aginfra_eu.lom_general_keyword_string_type}}\
+					<li style="border:none;"><a href="#" source_id="{{_source._id}}" class="esbb-germplasm-button" title="Search Germplasm">{{value}}</a></li>\
+				{{/_source.aginfra_eu.lom_general_keyword_string_type}}\
+			</ul>\
+			{{#_source.aginfra_eu.germplasm.0}}<div>Germplasm data:</div>{{/_source.aginfra_eu.germplasm.0}}\
+			<ul class="facets-results">\
+				{{#_source.aginfra_eu.germplasm}}\
+					<li style="border:none;"><a href="#" class="esbb-germplasm-button" title="Search Germplasm">{{value}}</a></li>\
+				{{/_source.aginfra_eu.germplasm}}\
+			</ul>\
+			<div class="germplasm-full-col" id="germplasm_{{_source._id}}">\
+				<div class="germplasm-titlebar-generic">Germplasm Data semantic results (CRA)\
+				</div>\
+				<div id="close-germplasm" onclick="$(\'#germplasm_{{_source._id}}\').hide();"><img src="img/close.png"></div>\
+				<div class="germplasm-panel-generic" id="germplasm_panel_{{_source._id}}">\
+				</div>\
+			</div>\
 			<div>Context:</div>\
 			<ul class="facets-results">\
 				{{#_source.aginfra_eu.lom_educational_context_value_type}}\
@@ -95,6 +108,28 @@ var esbbSimpleAppView = Backbone.View.extend({
 		{{/hits}}\
 		',
 
+	events : {
+		'click .esbb-germplasm-button' : 'searchGermplasm',
+	},
+
+	searchGermplasm: function( ev ) {
+		var query = $(ev.currentTarget).text();		
+		var source_id = $(ev.currentTarget).attr("source_id");
+		var container = $( '#germplasm_panel_'+source_id );
+		console.log(query);
+		$.ajax({   
+            url: "sparql/select.php?q="+query, 
+            type: "GET", 
+            //dataType: "json", 
+            success: function(data) {
+                //console.log(data);
+                container.html(data);
+                $("#germplasm_"+source_id).show();
+            }
+        });
+		
+		ev.preventDefault();
+	},
 
 	initialize: function() {
 		this.query = this.options.query;
